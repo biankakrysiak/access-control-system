@@ -22,6 +22,29 @@ The full system consists of:
 
 ---
 
+## System Architecture
+
+```
+RFID Card
+    ↓ (SPI)
+  RC522
+    ↓
+ESP32-C6 ──[Zigbee IEEE 802.15.4]──► Sonoff Zigbee Dongle
+                                              ↓
+                                       Zigbee2MQTT
+                                              ↓
+                                    MQTT Broker (Mosquitto)
+                                              ↓
+                                          Node-RED
+                                         ↙        ↘
+                                  PostgreSQL     Notifications
+                                  (access log)     (Telegram)
+                                         ↓
+                                    Dashboard GUI
+```
+
+---
+
 ## My Responsibilities
 
 - Wiring and integrating the RC522 RFID reader with ESP32-C6
@@ -45,16 +68,71 @@ The full system consists of:
 
 ---
 
+## Wiring Diagram
+
+![Wiring Diagram](wiringDiagram.png)
+
+### RC522 RFID Reader
+| RC522 Pin | ESP32-C6 GPIO | Description |
+|---|---|---|
+| SDA (CS) | GPIO8 | Chip Select |
+| SCK | GPIO6 | SPI Clock |
+| MOSI | GPIO5 | SPI MOSI |
+| MISO | GPIO4 | SPI MISO |
+| IRQ | - | Not connected |
+| GND | GND | Ground |
+| RST | GPIO7 | Reset |
+| 3.3V | 3.3V | Power |
+
+### LEDs
+| Component | ESP32-C6 GPIO | Description |
+|---|---|---|
+| Green LED anode (+) | GPIO21 | Access granted |
+| Red LED anode (+) | GPIO20 | Access denied |
+| Both cathodes (-) | 330Ω -> GND | Current limiting resistor required |
+
+### SG90 Servo
+| Servo Wire | ESP32-C6 | Description |
+|---|---|---|
+| Signal (yellow) | GPIO19 | PWM control |
+| VCC (red) | 5V | Power |
+| GND (brown) | GND | Ground |
+
+---
+
 ## How It Works
 
 1. User scans RFID card at the reader
 2. ESP32-C6 reads the card UID
-3. UID is published via Zigbee to the Zigbee2MQTT broker on Raspberry Pi
+3. UID is sent via Zigbee to the Zigbee2MQTT coordinator on Raspberry Pi
 4. Raspberry Pi checks the UID against the user database
 5. Authorization result is sent back to ESP32-C6 via Zigbee
 6. If granted: servo unlocks the door, green LED on, event logged. Raspberry Pi triggers the camera to record a short clip of the entry. Recording is saved locally and linked to the access log entry.
 7. If denied: lock stays closed, red LED on, event logged
 
+---
+
+## Raspberry Pi Stack
+
+| Software | Purpose |
+|---|---|
+| Raspberry Pi OS Lite (64-bit) | Headless operating system |
+| Zigbee2MQTT | Zigbee coordinator bridge |
+| Mosquitto | MQTT broker |
+| Node-RED | Backend logic + GUI dashboard |
+| PostgreSQL | Access log and authorized cards database |
+
+---
+
+## Repository Structure
+
+```
+├── zigbeeTest/         # Zigbee connectivity test (ESP32-C6 <-> Zigbee2MQTT)
+│   └── zigbeeTest.ino
+├── rfidAccess/         # (coming soon) Full RFID + Zigbee + servo firmware
+├── wiringDiagram.png  # Hardware wiring diagram
+└── README.md
+```
 ---
 
 ## Setup & Flashing
@@ -81,7 +159,14 @@ The full system consists of:
 - **Language:** C++ (Arduino framework)
 - **Communication:** Zigbee (native ESP32-C6) via Zigbee2MQTT
 - **Protocols:** SPI (RFID)
-- **Hardware:** ESP32-C6, RC522, servo
+- **Hardware:** ESP32-C6, RC522, servo, Sonoff Zigbee Dongle
+
+---
+
+## Known Limitations
+
+- ESP32-C6 supports either Zigbee **or** WiFi at a time, not simultaneously
+- Zigbee range ~10–30m indoors depending on obstacles
 
 ---
 
