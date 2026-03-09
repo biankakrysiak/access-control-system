@@ -142,8 +142,8 @@ ESP32-C6 ──[Zigbee IEEE 802.15.4]──► Sonoff Zigbee Dongle
 - ESP32 Arduino core with Zigbee support
 
 **Arduino IDE settings:**
-- Tools → Partition Scheme -> **Zigbee 4MB with spiffs**
-- Tools → Zigbee Mode -> **Zigbee End Device**
+- Tools -> Partition Scheme -> **Zigbee 4MB with spiffs**
+- Tools -> Zigbee Mode -> **Zigbee End Device**
 - Board: `ESP32-C6 Dev Module`
 
 **Steps:**
