@@ -12,6 +12,14 @@ CORS(app)
 def index():
 	return send_from_directory('/home/bianka/access_server', 'admin.html')
 
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('/home/bianka/access_server', 'style.css')
+
+@app.route('/app.js')
+def serve_js():
+    return send_from_directory('/home/bianka/access_server', 'app.js')
+
 def get_conn():
     return psycopg2.connect(
         dbname="access_control",
