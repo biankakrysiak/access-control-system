@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">Access <span>Control</span></div>
+  <nav>
+    <div class="nav-item active" onclick="showPage('dashboard', this)">Dashboard</div>
+    <div class="nav-item" onclick="showPage('logs', this)">Access Logs</div>
+    <div class="nav-item" onclick="showPage('videos', this)">Recordings</div>
+    <div class="nav-item" onclick="showPage('users', this)">Users</div>
+  </nav>
+</aside>
+
+<main class="main">
+
+  <!-- dashboard -->
+  <div class="page active" id="page-dashboard">
+    <h1>Dashboard</h1>
+    <div class="stats-grid">
+      <div class="stat green"><div class="stat-label">Granted</div><div class="stat-value" id="s-granted">—</div></div>
+      <div class="stat red"><div class="stat-label">Denied</div><div class="stat-value" id="s-denied">—</div></div>
+      <div class="stat blue"><div class="stat-label">Active Users</div><div class="stat-value" id="s-users">—</div></div>
+      <div class="stat purple"><div class="stat-label">Recordings</div><div class="stat-value" id="s-videos">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Activity - last 7 days</div>
+      <div class="chart-wrap"><div class="bars" id="chart"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Recent access</div>
+      <div id="recent-body"><div class="empty">loading...</div></div>
+    </div>
+  </div>
+
+  <!-- logs -->
+  <div class="page" id="page-logs">
+    <h1>Access Logs</h1>
+    <div class="card">
+      <div class="card-header">All entries <button class="btn btn-outline" onclick="loadLogs()">Refresh</button></div>
+      <div id="logs-body"><div class="empty">loading...</div></div>
+    </div>
+  </div>
+
+  <!-- videos -->
+  <div class="page" id="page-videos">
+    <h1>Recordings</h1>
+    <div class="card">
+      <div class="card-header">Video footage <button class="btn btn-outline" onclick="loadVideos()">Refresh</button></div>
+      <div id="videos-body"><div class="empty">loading...</div></div>
+    </div>
+  </div>
+
+  <!-- users -->
+  <div class="page" id="page-users">
+    <h1>Users</h1>
+    <div class="card">
+      <div class="card-header">Add new user</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Card UID</label>
+          <input id="new-uid" type="text" placeholder="AA:BB:CC:DD">
+        </div>
+        <div class="form-group">
+          <label>Name</label>
+          <input id="new-name" type="text" placeholder="Jan Kowalski">
+        </div>
+        <button class="btn btn-primary" onclick="addUser()">Add user</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Registered cards <button class="btn btn-outline" onclick="loadUsers()">Refresh</button></div>
+      <div id="users-body"><div class="empty">loading...</div></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- video modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      Video playback
+      <button class="modal-close" onclick="closeModal()">X</button>
+    </div>
+    <video id="modal-video" controls></video>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
