@@ -48,15 +48,16 @@ picam2.configure(
 	)
 )
 picam2.start()
-fourcc = cv.VideoWriter_fourcc(*'mp4v')
+fourcc = cv.VideoWriter_fourcc(*'avc1')
 out = cv.VideoWriter(file_path, fourcc, 20, (640, 480))
 start = time.time()
 
+total_faces = 0
 while True:
 	frame = picam2.capture_array()
 	gray = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
 	faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-
+	total_faces = max(total_faces, len(faces))
 	for (x, y, w, h) in faces:
         	cv.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 	
@@ -64,8 +65,8 @@ while True:
 	if time.time() - start > 10:
 		break
 cur.execute(
-	"INSERT INTO videos (uid, file_path, duration_seconds, result) VALUES (%s, %s, %s, %s)",
-	(uid, file_path, 10, "granted")
+	"INSERT INTO videos (uid, file_path, duration_seconds, result, faces_count) VALUES (%s, %s, %s, %s, %s)",
+	(uid, file_path, 10, "granted", total_faces)
 )
 
 conn.commit()
