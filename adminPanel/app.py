@@ -14,7 +14,7 @@ def index():
 
 @app.route('/style.css')
 def serve_css():
-    return send_from_directory('/home/bianka/access_server', 'style.css')
+    return send_from_directory('/home/bianka/access_server', 'styles.css')
 
 @app.route('/app.js')
 def serve_js():
