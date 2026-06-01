@@ -37,10 +37,8 @@ ESP32-C6 ──[Zigbee IEEE 802.15.4]──► Sonoff Zigbee Dongle
                                               ↓
                                           Node-RED
                                          ↙        ↘
-                                  PostgreSQL     Notifications
-                                  (access log)     (Telegram)
-                                         ↓
-                                    Dashboard GUI
+                                  PostgreSQL     Admin Panel
+                                  (access log)     (Flask)
 ```
 
 ---
