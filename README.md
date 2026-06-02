@@ -121,10 +121,10 @@ ESP32-C6 ──[Zigbee IEEE 802.15.4]──► Sonoff Zigbee Dongle
 | Raspberry Pi OS Lite (64-bit) | Headless operating system |
 | Zigbee2MQTT | Zigbee coordinator bridge |
 | Mosquitto | MQTT broker |
-| Node-RED | Backend logic + GUI dashboard |
-| PostgreSQL | Access log and authorized cards database |
+| Node-RED | Backend logic |
+| PostgreSQL | Access log, authorized cards and videos database |
 | Flask | REST API for admin panel |
-| OpenCV + Picamera2 | Camera recording with face detection |
+| OpenCV + Picamera3 | Camera recording with face detection |
 
 ---
 
